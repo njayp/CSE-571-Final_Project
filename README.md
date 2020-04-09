@@ -4,7 +4,7 @@ Reinforcement learning in games (Wumpus World environment)
 
 From the professor:
 
-Project topic 5. Reinforcement Learningagent in Wumpus world
+Project topic 5. Reinforcement Learning agent in Wumpus world
 
 a)Implement and integrate any chosen reinforcement learning method to control your agent in the Wumpus worldwith noisy action model(you may assume and implement whatever noisy action model that is reasonable). This turns your logicagent into a learning agent.
 
