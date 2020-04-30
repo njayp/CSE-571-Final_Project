@@ -20,7 +20,7 @@ from utils import *
 import agents
 import sys
 
-import wumpus.noisy as noisy
+import wumpus
 import random
 
 class Wumpus(agents.Thing):
@@ -320,7 +320,7 @@ class WumpusEnvironment(agents.XYEnvironment):
         elif action == 'Forward':
             
             # noisy impl
-            if noisy:
+            if wumpus.noisy:
                 # if noise trigger
                 if random.random() < .2:
                     print "UZAI"
@@ -330,7 +330,7 @@ class WumpusEnvironment(agents.XYEnvironment):
                         self.move_to(agent, vector_add(self.heading_to_vector(self.turn_heading(agent.heading, -1)), agent.location))
                     else:
                         self.move_to(agent, vector_add(self.heading_to_vector(self.turn_heading(agent.heading, 1)), agent.location))
-                return
+                    return
 
             self.move_to(agent, vector_add(self.heading_to_vector(agent.heading),
                                            agent.location))

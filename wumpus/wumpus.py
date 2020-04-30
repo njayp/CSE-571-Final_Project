@@ -20,7 +20,7 @@ from wumpus_agent import *
 from time import clock
 import wumpus_environment
 
-noisy
+noisy = FALSE
 
 #-------------------------------------------------------------------------------
 # Wumpus World Scenarios
