@@ -20,9 +20,6 @@ from utils import *
 import agents
 import sys
 
-import wumpus
-import random
-
 class Wumpus(agents.Thing):
 
     def __init__(self):
@@ -318,20 +315,6 @@ class WumpusEnvironment(agents.XYEnvironment):
         elif action == 'TurnLeft':
             agent.heading = self.turn_heading(agent.heading, +1)
         elif action == 'Forward':
-            
-            # noisy impl
-            if wumpus.noisy:
-                # if noise trigger
-                if random.random() < .2:
-                    print "UZAI"
-                    # determine direction
-                    if random.random() < .5:
-                        # move right
-                        self.move_to(agent, vector_add(self.heading_to_vector(self.turn_heading(agent.heading, -1)), agent.location))
-                    else:
-                        self.move_to(agent, vector_add(self.heading_to_vector(self.turn_heading(agent.heading, 1)), agent.location))
-                    return
-
             self.move_to(agent, vector_add(self.heading_to_vector(agent.heading),
                                            agent.location))
         elif action == 'Grab':

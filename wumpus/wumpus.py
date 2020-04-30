@@ -20,7 +20,6 @@ from wumpus_agent import *
 from time import clock
 import wumpus_environment
 
-noisy = FALSE
 
 #-------------------------------------------------------------------------------
 # Wumpus World Scenarios
@@ -644,10 +643,6 @@ def readCommand( argv ):
                       default=False,
                       help=default("Test connection to command-line MiniSat"))
 
-    parser.add_option('-n', '--noise', action='store_true', dest='noisy',
-                      default=False,
-                      help=default("Noisy action model. .2 of the time, forward command will instead move right or left. Heading will not change."))
-
     options, otherjunk = parser.parse_args(argv)
     
     if len(otherjunk) != 0:
@@ -656,8 +651,6 @@ def readCommand( argv ):
     return options
 
 def run_command(options):
-    noisy = options.noisy
-
     if options.test_minisat:
         run_minisat_test()
         return
