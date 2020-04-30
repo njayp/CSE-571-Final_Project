@@ -1,0 +1,23 @@
+Some issues found with other groups:
+1.
+In the project description for topic 5 (Reinforcement learning agent in Wumpus world), you mentioned noisy action model. I am not quite sure what this means: 
+Does it means stochastic actions, ie if agent decides forward action, 80% of time it will perform forward action, 20% of time it will randomly choose actions other than forward action (like turnRight, turnLeft, grab)
+OR
+Does it mean stochastic outcome of actions (similar to robot world), ie if agent decides to go forward, 80% of time it will actually go forward, and 20% of time it will end up in some other location (other than its current location like left cell or right cell). 
+Ans: Second
+
+2. Question 1) In the team project for implementing Wumpus World with RL, even after the agent finds that it would achieve maximum reward after it climbs out with the gold, it still does that only a small number of times. Most of the times it would just grab the gold and keep on living even after knowing through qvalues that climbing out after having gold would be best. I don't understand why does that happen.
+Question 2) I tried playing with rewards to incentivize the agent. For example because shooting arrow had negative reward and killing Wumpus had no reward, I assigned positive reward for killing the Wumpus. But I wonder if it is the right choice. Because if we incentivize agent for something through reward, is it RL after all? Shouldn't RL make the agent find by itself that killing the Wumpus is a good choice.
+Ans: 1) Is it possible that your agent is still exploring? Given that the Q-values suggest climbing out with the gold, one possible explanation is that your agent is still exploring. Trying reducing the epsilon after convergence.
+2) This will be dependent on your environment setting. Even with no reward for killing the Wumpus, depending on the setting, killing the Wumpus may enable the agent to find a better path to the gold, thus achieving a better solution than avoiding the Wumpus. In a different setting, it may be better to save the arrow if the cost for using it outweighs the saving in the path cost.
+
+3. In Project 5 of Team project, we have to Compare the performance of your hybrid logic agent with reinforcement reasoning agent, under noisy model.
+After introducing the noise for Forward action (say 20% of the time, it ends up in left or right square) to the hybrid agent, we see that there comes the discrepancy between the actual state of the environment and the knowledge base. In this case, the following scenarios happen:
+Agent is unable to infer the current location -> defaults to initial location
+sometimes agent falls into Wumpus/Pit
+Agent keeps on replanning to visit safe square even after grabbing gold,
+sometimes the system hangs due to very large KB being converted to CNF
+Because of these scenarios, the agent gets different points every time. How exactly do we compare this to our RL agent? Is it fine to compare with just observations? Because we're not sure how to compare quantitatively, and which metric to use. 
+Ans:1) For the logic agent, you may want to "simulate" the noise since the knowledge base does not allow noisy actions directly. This means that you need to deliberately change the action that is chosen by your logic agent occasionally to add the noise. In other words, stochastic actions with logic agent can be simulated by the agent sometimes choosing random actions.
+
+2) As a result of such stochastic actions, your logic agent is expected to obtain different points in different runs. For comparison, you can compare its performance with your RL agent statistically (i.e., using the student t-test) and in different environments. One possible metric to use is the final points obtained.
