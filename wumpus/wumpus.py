@@ -19,7 +19,7 @@
 from wumpus_agent import *
 from time import clock
 import wumpus_environment
-#from q_learning_agent import QLearningAgent
+from q_learning_agent import QLearningAgent
 
 
 #-------------------------------------------------------------------------------
@@ -185,15 +185,15 @@ def world_scenario_hybrid_wumpus_agent_from_layout(layout_filename):
 #------------------------------------
 # examples of constructing HybridWumpusAgent scenario
 # specifying objects as list
-#    
-#def wscenario_4x4_QLearningAgent():
-#    return WumpusWorldScenario(agent = QLearningAgent('north', verbose=True), 
-#                                objects = [(Wumpus(),(1,3)),
-#                                          (Pit(),(3,3)),
-#                                          (Pit(),(3,1)),
-#                                          (Gold(),(2,3))],
-#                               width = 4, height = 4, entrance = (1,1),
-#                               trace=True)
+    
+def wscenario_4x4_QLearningAgent():
+    return WumpusWorldScenario(agent = QLearningAgent('north', verbose=True), 
+                                objects = [(Wumpus(),(1,3)),
+                                          (Pit(),(3,3)),
+                                          (Pit(),(3,1)),
+                                          (Gold(),(2,3))],
+                               width = 4, height = 4, entrance = (1,1),
+                               trace=True)
     
 #-------------------------------------------------------------------------------
 
@@ -678,8 +678,8 @@ def run_command(options):
             s = world_scenario_manual_with_kb_from_layout(options.layout)
         else:
             s = wscenario_4x4_manual_HybridWumpusAgent()
-#    elif options.qlagent:
-#        s = wscenario_4x4_QLearningAgent()
+    elif options.qlagent:
+        s = wscenario_4x4_QLearningAgent()
     else:
         if options.layout:
             s = world_scenario_manual_from_layout(options.layout)
