@@ -106,11 +106,11 @@ class MonteCarloDictionary():
 
             # update entry
             values = self.dic[state]
-            values[action] += delta + final_score/50
+            values[action] += delta + final_score/75
 
             # cap preference
-            #if values[action] > 100:
-            #   values[action] = 100
+            if (action == 1 or action == 2) and values[action] > 100:
+               values[action] = 100
 
             self.dic[state] = values
 
