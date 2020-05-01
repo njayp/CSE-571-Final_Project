@@ -43,6 +43,10 @@ class MonteCarloAgent(Explorer):
         self.states.append(state) # record current state
 
         action_index = self.mcd.queryDictionary(state) # get best action from nearest state
+
+        if(random.random() < .2): # impl action noise
+            action_index -= random.randint(1, 3)
+
         self.actions.append(action_index) # record chosen action
         action = self.possible_actions[action_index]
         return action
@@ -106,7 +110,7 @@ class MonteCarloDictionary():
 
             # update entry
             values = self.dic[state]
-            values[action] += delta + final_score/75
+            values[action] += delta + final_score/50
 
             # cap preference
             if (action == 1 or action == 2) and values[action] > 100:

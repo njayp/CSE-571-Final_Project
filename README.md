@@ -13,3 +13,14 @@ b)To complete this project, the prerequisiteis that you know the basics of reinf
 c)Submit a written report with your findings, which should include: 0. Abstract; 1. Introduction (motivation and your achievements in this project); 2) Technical approach (a brief technical discussion of how you formulate the problem into a reinforcement learning problem); 3) Results (Results that CLEARLY support your conclusions in a statistically meaningful way.). 4) Conclusions (any observations and discussions); 5) Team effectiveness (notes about team member contributions).
 
 d)Submit your code with comments, and with instructions(as a README file) to run it.
+
+# instillation
+
+python 2.7
+pip install pickle
+
+# new args
+-i int -- loops int times
+-m -- use monte carlo agent
+-q -- use q-value agent
+-r -- use randomized layout
