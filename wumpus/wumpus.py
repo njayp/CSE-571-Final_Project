@@ -20,6 +20,7 @@ from wumpus_agent import *
 from montecarlo_agent import *
 from time import clock
 import wumpus_environment
+import random
 from q_learning_agent import QLearningAgent
 
 wins = 0
@@ -209,6 +210,27 @@ def wscenario_4x4_QLearningAgent():
                                           (Gold(),(2,3))],
                                width = 4, height = 4, entrance = (1,1),
                                trace=True)
+
+
+#-------------------------------------------------------------------------------
+
+def world_scenario_qlearn_wumpus_agent_from_layout(layout_filename):
+    """
+    Create WumpusWorldScenario with an automated agent_program that will
+        try to solve the Hunt The Wumpus game on its own.
+    layout_filename := name of layout file to load
+    """
+    return WumpusWorldScenario(layout_file = layout_filename,
+                               agent = MonteCarloAgent('north', verbose=True),
+                               trace=False)
+
+
+
+def world_scenario_qlearn_wumpus_agent_from_random():
+    return WumpusWorldScenario(agent = MonteCarloAgent('north', verbose=True),
+                               objects = random_world(),
+                               width = 4, height = 4, entrance = (1,1),
+                               trace=True)
     
 #-------------------------------------------------------------------------------
 
@@ -234,6 +256,26 @@ def world_scenario_monte_wumpus_agent_from_layout(layout_filename):
                                agent = MonteCarloAgent('north', verbose=True),
                                trace=False)
 
+
+def random_world():
+    locs = []
+    while len(locs) < 4:
+        x = random.randint(1,4)
+        y = random.randint(1,4)
+        if ((x, y) not in locs) and (not (x, y) == (1, 1)):
+            locs.append((x, y))
+    objects = []
+    objects.append((Wumpus(), locs.pop()))
+    objects.append((Pit(), locs.pop()))
+    objects.append((Pit(), locs.pop()))
+    objects.append((Gold(), locs.pop()))
+    return objects
+
+def world_scenario_monte_wumpus_agent_from_random():
+    return WumpusWorldScenario(agent = MonteCarloAgent('north', verbose=True),
+                               objects = random_world(),
+                               width = 4, height = 4, entrance = (1,1),
+                               trace=True)
 #------------------------------------
 # examples of constructing HybridWumpusAgent scenario
 # specifying objects as list
@@ -707,6 +749,9 @@ def readCommand( argv ):
                       default=1,
                       help=default("Loop i times"))
 
+    parser.add_option('-r', '--random', action='store_true', dest='random', default=False,
+                      help=default("Create Random World"))
+
     options, otherjunk = parser.parse_args(argv)
     
     if len(otherjunk) != 0:
@@ -727,13 +772,20 @@ def run_command(options):
                 s = wscenario_4x4_HybridWumpusAgent()
 
         elif options.monte:
-            if options.layout:
+            if options.random:
+                s = world_scenario_monte_wumpus_agent_from_random()
+            elif options.layout:
                 s = world_scenario_monte_wumpus_agent_from_layout(options.layout)
             else:
                 s = wscenario_4x4_MonteWumpusAgent()
         
         elif options.qlagent:
-            s = wscenario_4x4_QLearningAgent()
+            if options.random:
+                s = world_scenario_qlearn_wumpus_agent_from_random()
+            elif options.layout:
+                s = world_scenario_qlearn_wumpus_agent_from_layout(options.layout)
+            else:
+                s = wscenario_4x4_QLearningAgent()
 
         elif options.kb:
             if options.layout:
