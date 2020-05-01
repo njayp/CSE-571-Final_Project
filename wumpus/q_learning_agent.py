@@ -22,27 +22,28 @@ class QLearningAgent(Explorer):
         self.QValues = {}
         self.score = 0
         self.step = 0
-        self.epsilon = 0.05
-        self.gamma = 0.8
         self.alpha = 0.2
         self.discount = 0.9
         self.flag = True
-        self.action_list = ['TurnRight', 'TurnLeft', 'Forward', 'Climb', 'Shoot', 'Stop', 'Grab']
+#        self.action_list = ['TurnRight', 'TurnLeft', 'Forward', 'Climb', 'Shoot', 'Stop', 'Grab']
+        self.action_list = ['TurnRight', 'TurnLeft', 'Forward', 'Grab', 'Climb']
         self.prev_action = None
         self.prev_state = None
         
     
-    def reset(self):
-        super(QLearningAgent, self).reset()
-        self.step = 0
-        self.values = []
-        self.QValues = {}
-        self.flag = True
-        self.write_q_values(self.QValues)
-        
+#    def reset(self):
+#        super(QLearningAgent, self).reset()
+#        self.step = 0
+#        self.values = []
+#        self.QValues = {}
+#        self.flag = True
+#        self.write_q_values(self.QValues)
+#        
         
     def agent_program(self, percept):
 #        self.values.append(self.performance_measure)
+        if percept[2] and self.location == self.initial_location:
+            return 'Climb'
         state = (tuple(percept), self.location)
         self.load_q_values()
         for action in self.action_list:
@@ -71,7 +72,7 @@ class QLearningAgent(Explorer):
                 self.QValues = pickle.load(file)
         except:
             print("Dictionary cannot be opened")
-            sys.exit(-1)
+            self.write_q_values(self.QValues)
         if self.QValues == None:
             self.QValues = {}
             
@@ -82,7 +83,7 @@ class QLearningAgent(Explorer):
 #        legal_actions = self.get_legal_actions(state)
         q_max = max([ self.QValues[(state, action)] for action in self.action_list])
         updated_val = self.get_reward() + self.discount * q_max
-        self.QValues[(self.prev_state, self.prev_action)] = self.QValues[(state, self.prev_action)] + self.alpha * (updated_val - self.QValues[(self.prev_state, self.prev_action)])
+        self.QValues[(self.prev_state, self.prev_action)] = self.QValues[(self.prev_state, self.prev_action)] + self.alpha * (updated_val - self.QValues[(self.prev_state, self.prev_action)])
         self.write_q_values(self.QValues)
             
         
@@ -100,7 +101,7 @@ class QLearningAgent(Explorer):
         if choice > 2:
             return max_val_list[-1][1][1]
         else:
-            list_copy = ['TurnRight', 'TurnLeft', 'Forward', 'Climb', 'Shoot', 'Stop', 'Grab']
+            list_copy = ['TurnRight', 'TurnLeft', 'Forward', 'Grab', 'Climb']
             list_copy.remove(max_val_list[-1][1][1])
             return random.choice(list_copy)
         
