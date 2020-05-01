@@ -262,7 +262,7 @@ def random_world():
     while len(locs) < 4:
         x = random.randint(1,4)
         y = random.randint(1,4)
-        if ((x, y) not in locs) and (not (x, y) == (1, 1)):
+        if ((x, y) not in locs) and (not (x, y) == (1, 1)) and (not (x, y) == (1, 2)) and (not (x, y) == (2, 1)):
             locs.append((x, y))
     objects = []
     objects.append((Wumpus(), locs.pop()))

@@ -19,6 +19,7 @@
 from wumpus_environment import *
 from wumpus_kb import *
 import search
+import random
 
 #-------------------------------------------------------------------------------
 # Distance fn
@@ -103,7 +104,14 @@ def plan_route(current, heading, goals, allowed):
         #       the heuristic, so no need to provide here to astar_search()
         node = search.astar_search(prp)
         if node:
-            return node.solution()
+            a = node.solution()
+            actions = ["Forward", "TurnRight", "TurnLeft", "Shoot"]
+            for i, action in enumerate(a):
+                if random.random() < .2:
+                    action_index = actions.index(action)
+                    action_index -= random.randint(1, 3)
+                    a[i] = actions[action_index]
+            return a
     
     # no route can be found, return empty list
     return []
