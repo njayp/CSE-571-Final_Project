@@ -3,10 +3,20 @@ First discussion: Discussion regarding various reinforcement learning methods. 4
 1. Monte-Carlo method(direct evaluation)
 2. Q learning
 3. Temporal difference learning
+4. Approximate Q learning
+5. Dynamic Programming
+6. Adaptive Dynamic Programming
+7. SARSA (state-action-reward-state-action)
 
 The initial discussion started with discussing the various reinforcement learning techniques, the various actions, the goal of the project and going about the problem of incorporating the noise action model into the wumpus world. The files presented for the previous projects were modified incorrectly at first and then corrected to include a noise of 20%.
 The implication of this is that the wumpus(our agent) choses a certain diretion to move towards and end s up reaching the next location or state s' from the current state s with a probability of 0.8. The agent moves in the orthogonal direction with a probability of 0.1 each. Thus, various Reinforcement Learning techinques as taught in class as mentioned above. 
 The work was distributed evenly between the 3 members of the team and each one implemented one technique. The summarization of the reinforcement techniques is as following:
 
-q. monte-Carlo technique(Direct evaluation): The Monte Carlo evaluation me
- 
+1. Monte-Carlo technique(Direct evaluation): The Monte Carlo evaluation method is a direct evaluation method where the value or the utility of each state is calculated bsaed on the sum of the reward obtained from each state till the terminal state. The overall value or utility is calculated by calculating the average of the utilities obtained from each trial.
+
+2. Q learning: It is a modification of the Bellman equations such that an intermediate value called as the Q-value of a state is calculated and updated at each iteration when the agent takes a certain action and moves out of the state. The environment is initialized such that the Q-values for all states is zero initially.
+
+After initial discussions, It has been decided that we will be working on the noise model first adn then move on to tackling each reinforcement learning technique as time permits.
+
+The noise model implemented intially was incorrect and the modified version worked out correctly as also explained by the professor over online discussion forum. A file has been made separately for inputs by the instructor.
+
