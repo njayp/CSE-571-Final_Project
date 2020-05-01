@@ -1,6 +1,12 @@
-First discussion: Discussion regarding various reinforcement learning methods. 
+First discussion: Discussion regarding various reinforcement learning methods. 4/21/20
 
 1. Monte-Carlo method(direct evaluation)
-2. Temporal difference learning
-3. Q learning
-4. 
+2. Q learning
+3. Temporal difference learning
+
+The initial discussion started with discussing the various reinforcement learning techniques, the various actions, the goal of the project and going about the problem of incorporating the noise action model into the wumpus world. The files presented for the previous projects were modified incorrectly at first and then corrected to include a noise of 20%.
+The implication of this is that the wumpus(our agent) choses a certain diretion to move towards and end s up reaching the next location or state s' from the current state s with a probability of 0.8. The agent moves in the orthogonal direction with a probability of 0.1 each. Thus, various Reinforcement Learning techinques as taught in class as mentioned above. 
+The work was distributed evenly between the 3 members of the team and each one implemented one technique. The summarization of the reinforcement techniques is as following:
+
+q. monte-Carlo technique(Direct evaluation): The Monte Carlo evaluation me
+ 
