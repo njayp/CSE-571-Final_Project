@@ -73,6 +73,7 @@ class MonteCarloAgent(Explorer):
 
     def close(self):
         #print self.states
+        del self.scores[0]
         self.mcd.saveDictionary(self.states, self.actions, self.scores)
 
 
@@ -106,6 +107,11 @@ class MonteCarloDictionary():
             # update entry
             values = self.dic[state]
             values[action] += delta + final_score/50
+
+            # cap preference
+            #if values[action] > 100:
+            #   values[action] = 100
+
             self.dic[state] = values
 
         # save to file
