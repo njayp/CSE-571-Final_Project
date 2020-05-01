@@ -17,10 +17,12 @@
 # python project, see https://github.com/netom/satispy .
 
 from wumpus_agent import *
+from montecarlo_agent import *
 from time import clock
 import wumpus_environment
 
-
+wins = 0
+losses = 0
 #-------------------------------------------------------------------------------
 # Wumpus World Scenarios
 #-------------------------------------------------------------------------------
@@ -132,19 +134,31 @@ class WumpusWorldScenario(object):
 
     def step(self):
         self.env.step()
-        print
-        print "Current Wumpus Environment:"
-        print self.env.to_string()
+        #print
+        #print "Current Wumpus Environment:"
+        #print self.env.to_string()
 
     def run(self, steps = 1000):
-        print self.env.to_string()
+        #print self.env.to_string()
         for step in range(steps):
-            if self.env.is_done():
+            if self.env.is_done() or step == 999:
                 print "DONE."
                 slist = []
                 if len(self.env.agents) > 0:
                     slist += ['Final Scores:']
                 for agent in self.env.agents:
+
+                    if isinstance(agent, MonteCarloAgent):
+                        agent.scores.append(agent.performance_measure)
+                        agent.close()
+
+                    if agent.performance_measure > 0:
+                        global wins
+                        wins += 1
+                    else:
+                        global losses
+                        losses += 1
+
                     slist.append(' {0}={1}'.format(agent, agent.performance_measure))
                     if agent.verbose:
                         if hasattr(agent, 'number_of_clauses_over_epochs'):
@@ -154,6 +168,7 @@ class WumpusWorldScenario(object):
                             print "belief_loc_query_times:" \
                                   +" {0}".format(agent.belief_loc_query_times)
                 print ''.join(slist)
+                print
                 return
             self.step()
 
@@ -187,6 +202,32 @@ def world_scenario_hybrid_wumpus_agent_from_layout(layout_filename):
 
 def wscenario_4x4_HybridWumpusAgent():
     return WumpusWorldScenario(agent = HybridWumpusAgent('north', verbose=True),
+                               objects = [(Wumpus(),(1,3)),
+                                          (Pit(),(3,3)),
+                                          (Pit(),(3,1)),
+                                          (Gold(),(2,3))],
+                               width = 4, height = 4, entrance = (1,1),
+                               trace=True)
+
+
+#-------------------------------------------------------------------------------
+
+def world_scenario_monte_wumpus_agent_from_layout(layout_filename):
+    """
+    Create WumpusWorldScenario with an automated agent_program that will
+        try to solve the Hunt The Wumpus game on its own.
+    layout_filename := name of layout file to load
+    """
+    return WumpusWorldScenario(layout_file = layout_filename,
+                               agent = MonteCarloAgent('north', verbose=True),
+                               trace=False)
+
+#------------------------------------
+# examples of constructing HybridWumpusAgent scenario
+# specifying objects as list
+
+def wscenario_4x4_MonteWumpusAgent():
+    return WumpusWorldScenario(agent = MonteCarloAgent('north', verbose=True),
                                objects = [(Wumpus(),(1,3)),
                                           (Pit(),(3,3)),
                                           (Pit(),(3,1)),
@@ -636,12 +677,21 @@ def readCommand( argv ):
     parser.add_option('-y', '--hybrid', action='store_true', dest='hybrid', default=False,
                       help=default("Run hybrid wumpus agent" \
                                    + " (takes precedence over -k option)"))
+
+    parser.add_option('-m', '--monte', action='store_true', dest='monte', default=False,
+                      help=default("Run montecarlo wumpus agent" \
+                                   + " (takes precedence over -k option)"))
+
     parser.add_option('-l', '--layout', dest='layout', default=None,
                       help=default("Load layout file"))
 
     parser.add_option('-t', '--test', action='store_true', dest='test_minisat',
                       default=False,
                       help=default("Test connection to command-line MiniSat"))
+
+    parser.add_option('-i', '--loop', dest='loop', type="int",
+                      default=1,
+                      help=default("Loop i times"))
 
     options, otherjunk = parser.parse_args(argv)
     
@@ -651,25 +701,38 @@ def readCommand( argv ):
     return options
 
 def run_command(options):
-    if options.test_minisat:
-        run_minisat_test()
-        return
-    if options.hybrid:
-        if options.layout:
-            s = world_scenario_hybrid_wumpus_agent_from_layout(options.layout)
+    for i in range(options.loop):
+        if options.test_minisat:
+            run_minisat_test()
+            return
+        if options.hybrid:
+            if options.layout:
+                s = world_scenario_hybrid_wumpus_agent_from_layout(options.layout)
+            else:
+                s = wscenario_4x4_HybridWumpusAgent()
+
+        elif options.monte:
+            if options.layout:
+                s = world_scenario_monte_wumpus_agent_from_layout(options.layout)
+            else:
+                s = wscenario_4x4_MonteWumpusAgent()
+
+
+        elif options.kb:
+            if options.layout:
+                s = world_scenario_manual_with_kb_from_layout(options.layout)
+            else:
+                s = wscenario_4x4_manual_HybridWumpusAgent()
         else:
-            s = wscenario_4x4_HybridWumpusAgent()
-    elif options.kb:
-        if options.layout:
-            s = world_scenario_manual_with_kb_from_layout(options.layout)
-        else:
-            s = wscenario_4x4_manual_HybridWumpusAgent()
-    else:
-        if options.layout:
-            s = world_scenario_manual_from_layout(options.layout)
-        else:
-            s = wscenario_4x4_manual()
-    s.run()
+            if options.layout:
+                s = world_scenario_manual_from_layout(options.layout)
+            else:
+                s = wscenario_4x4_manual()
+        s.run()
+    
+    global wins
+    global losses
+    print "Wins-Losses: " + str(wins) + "-" + str(losses)
 
 #-------------------------------------------------------------------------------
 

@@ -124,11 +124,7 @@ def getForwardLoc(state):
         return (state[0] + 1, state[1])
 
 def roundDirection(direction):
-    if direction == -1:
-        return 3
-    if direction == 4:
-        return 0
-    return direction
+    return direction % 4
 
 class PlanRouteProblem(search.Problem):
     def __init__(self, initial, goals, allowed):
