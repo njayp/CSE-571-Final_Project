@@ -52,7 +52,7 @@ class MonteCarloAgent(Explorer):
         return action
 
     def makeState(self, percept):
-        state = [self.location[0], self.location[1], self.heading, self.has_gold, self.wumpus_alive]
+        state = [self.location[0], self.location[1], self.heading, self.has_gold, self.wumpus_alive, self.bump]
         state.extend(self.stench_array)
         state.extend(self.breeze_array)
         return tuple(state)
@@ -60,6 +60,11 @@ class MonteCarloAgent(Explorer):
     def updateBeliefs(self, percept):
         if percept[4]:
             self.wumpus_alive = 0
+
+        if percept[3]:
+            self.bump = 100
+        else:
+            self.bump = 0
 
         ones = self.location[0] - 1
         fours = (self.location[1] - 1) * 4
