@@ -21,7 +21,7 @@ from montecarlo_agent import *
 from time import clock
 import wumpus_environment
 import random
-from q_learning_agent import QLearningAgent
+from qvalue import QValueAgent
 import glo
 wins = 0
 losses = 0
@@ -150,7 +150,7 @@ class WumpusWorldScenario(object):
                     slist += ['Final Scores:']
                 for agent in self.env.agents:
 
-                    if isinstance(agent, MonteCarloAgent):
+                    if isinstance(agent, MonteCarloAgent) or isinstance(agent, QValueAgent):
                         agent.scores.append(agent.performance_measure)
                         agent.close()
 
@@ -203,7 +203,7 @@ def world_scenario_hybrid_wumpus_agent_from_layout(layout_filename):
 # specifying objects as list
     
 def wscenario_4x4_QLearningAgent():
-    return WumpusWorldScenario(agent = QLearningAgent('north', verbose=True), 
+    return WumpusWorldScenario(agent = QValueAgent('north', verbose=True), 
                                 objects = [(Wumpus(),(1,3)),
                                           (Pit(),(3,3)),
                                           (Pit(),(3,1)),
@@ -221,13 +221,13 @@ def world_scenario_qlearn_wumpus_agent_from_layout(layout_filename):
     layout_filename := name of layout file to load
     """
     return WumpusWorldScenario(layout_file = layout_filename,
-                               agent = MonteCarloAgent('north', verbose=True),
+                               agent = QValueAgent('north', verbose=True),
                                trace=False)
 
 
 
 def world_scenario_qlearn_wumpus_agent_from_random():
-    return WumpusWorldScenario(agent = MonteCarloAgent('north', verbose=True),
+    return WumpusWorldScenario(agent = QValueAgent('north', verbose=True),
                                objects = random_world(),
                                width = 4, height = 4, entrance = (1,1),
                                trace=True)
