@@ -22,7 +22,7 @@ from time import clock
 import wumpus_environment
 import random
 from q_learning_agent import QLearningAgent
-
+import glo
 wins = 0
 losses = 0
 #-------------------------------------------------------------------------------
@@ -752,6 +752,9 @@ def readCommand( argv ):
     parser.add_option('-r', '--random', action='store_true', dest='random', default=False,
                       help=default("Create Random World"))
 
+    parser.add_option('-n', '--noise', action='store_true', dest='noise', default=False,
+                      help=default("Add Action Noise"))
+
     options, otherjunk = parser.parse_args(argv)
     
     if len(otherjunk) != 0:
@@ -760,7 +763,8 @@ def readCommand( argv ):
     return options
 
 def run_command(options):
-    
+    glo.noise = options.noise
+
     for i in range(options.loop):
         if options.test_minisat:
             run_minisat_test()
@@ -810,5 +814,6 @@ if __name__ == '__main__':
     The main funciton called when wumpus_test.py is run from the command line:
     > python wumpus_test.py <options>
     """
+    glo.init()
     options = readCommand( sys.argv[1:] )
     run_command( options )

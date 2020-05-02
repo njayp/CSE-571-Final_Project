@@ -20,6 +20,7 @@ from wumpus_environment import *
 from wumpus_kb import *
 import search
 import random
+import glo
 
 #-------------------------------------------------------------------------------
 # Distance fn
@@ -107,7 +108,8 @@ def plan_route(current, heading, goals, allowed):
             a = node.solution()
             actions = ["Forward", "TurnRight", "TurnLeft", "Shoot"]
             for i, action in enumerate(a):
-                if random.random() < .2:
+                if glo.noise and random.random() < .2:
+                    #print "uzai"
                     action_index = actions.index(action)
                     action_index -= random.randint(1, 3)
                     a[i] = actions[action_index]

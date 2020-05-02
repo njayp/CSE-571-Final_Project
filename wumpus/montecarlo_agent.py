@@ -2,6 +2,7 @@ from logic import *
 from wumpus_environment import *
 from wumpus_kb import *
 from wumpus_planners import *
+import glo
 import minisat as msat
 from time import clock
 import sys
@@ -44,7 +45,8 @@ class MonteCarloAgent(Explorer):
 
         action_index = self.mcd.queryDictionary(state) # get best action from nearest state
 
-        if(random.random() < .2): # impl action noise
+        if(glo.noise and random.random() < .2): # impl action noise
+            #print "uzai"
             action_index -= random.randint(1, 3)
 
         self.actions.append(action_index) # record chosen action
